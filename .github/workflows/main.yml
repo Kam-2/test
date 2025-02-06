@@ -7,6 +7,10 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "feature" ]
+
+permissions:
+  contents: write  # Ensures the workflow has permission to push changes
+  
 jobs:
   merge:
     runs-on: windows-latest
@@ -27,10 +31,11 @@ jobs:
           git fetch origin dev
           git checkout dev
 
-       - name: Merge feature branch into dev
+      - name: Merge feature branch into dev
         run: |
-          git checkout dev
-          git merge --allow-unrelated-histories --no-ff --no-edit ${{ github.ref_name }}
+         git checkout dev
+         git merge --allow-unrelated-histories --no-ff --no-edit ${{ github.ref_name }}
+
       - name: Push Changes to Dev
         run: |
           git push origin dev

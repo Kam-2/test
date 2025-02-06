@@ -40,7 +40,7 @@ jobs:
           git merge origin/feature --no-ff -m "Merge changes from feature branch"
 
           # Push the updated dev branch back to the remote repository
-          git push origin dev
+          git push origin/dev
 
       # Optional: Run additional build, test, or deploy steps here
       - name: Run additional build or test actions

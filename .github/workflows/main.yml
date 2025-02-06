@@ -1,0 +1,36 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "feature" ]
+jobs:
+  merge:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}  # Checkout the branch that triggered the workflow
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "Kam-2"
+          git config --global user.email "Kamal@cube84.com"
+
+      - name: Checkout dev branch
+        run: |
+          git fetch origin dev
+          git checkout dev
+
+       - name: Merge feature branch into dev
+        run: |
+          git checkout dev
+          git merge --allow-unrelated-histories --no-ff --no-edit ${{ github.ref_name }}
+      - name: Push Changes to Dev
+        run: |
+          git push origin dev

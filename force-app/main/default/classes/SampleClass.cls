@@ -9,3 +9,4 @@ public class SampleClass {       //Class definition and body
       return myValue;
    }
 }
+//new line

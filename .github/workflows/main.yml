@@ -1,36 +1,48 @@
 name: CI
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push to the "feature" branch
   push:
-    branches: [ "feature" ]
+    branches: ["feature"]
 
-permissions:
-  contents: write  # Ensures the workflow has permission to push changes
-  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  merge:
-    runs-on: windows-latest
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout feature branch
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}  # Checkout the branch that triggered the workflow
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
 
-      - name: Set up Git
-        run: |
-          git config --global user.name "Kam-2"
-          git config --global user.email "Kamal@cube84.com"
+      # Runs a single command using the runner's shell
+      - name: Run a one-line script
+        run: echo "Hello, world!"
 
-      - name: Checkout dev branch
+      # Runs a set of commands using the runner's shell
+      - name: Update code in dev branch
         run: |
+          # Configure Git (if necessary)
+          git config user.name "Kam-2"
+          git config user.email "Kamal@cube84.com"
+
+          # Check out the dev branch
           git fetch origin dev
           git checkout dev
 
-      - name: Merge feature branch into dev
-        run: |
-          git merge --allow-unrelated-histories --no-ff --no-edit ${{ github.ref_name }}
+          # Merge changes from feature branch to dev
+          git merge origin/feature --no-ff -m "Merge changes from feature branch"
 
-      - name: Push Changes to Dev
+          # Push the updated dev branch back to the remote repository
+          git push origin dev
+
+      # Optional: Run additional build, test, or deploy steps here
+      - name: Run additional build or test actions
         run: |
-          git push origin dev 
+          echo "Add other actions to build, test, and deploy your project."
